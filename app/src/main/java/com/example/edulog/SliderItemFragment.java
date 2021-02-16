@@ -53,15 +53,19 @@ public class SliderItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView title = view.findViewById(R.id.textView2);
-        TextView titleText1 = view.findViewById(R.id.textView3);
-        ImageView imageView = view.findViewById(R.id.imageView);
-        // set page title
-        title.setText(texts[position]);
-        // set page sub title text
-        titleText1.setText(sub_texts[position]);
+        try {
+            TextView title = view.findViewById(R.id.textView2);
+            TextView titleText1 = view.findViewById(R.id.textView3);
+            ImageView imageView = view.findViewById(R.id.imageView);
+            // set page title
+            title.setText(texts[position]);
+            // set page sub title text
+            titleText1.setText(sub_texts[position]);
 
-        // set page image
-        imageView.setImageResource(images[position]);
+            // set page image
+            imageView.setImageResource(images[position]);
+        }catch (ArrayIndexOutOfBoundsException e) {
+
+        }
     }
 }

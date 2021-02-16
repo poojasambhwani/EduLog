@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -99,6 +100,22 @@ public class MainActivity extends AppCompatActivity {
         });
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SigninActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(MainActivity.this, SignupActivity.class);
+                startActivity(intent1);
+            }
+        });
+
     }
 
     class RemindTask extends TimerTask {

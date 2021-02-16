@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Online Courses"
         android:layout_marginTop="100dp"
-        android:layout_marginLeft="150dp"
+        android:layout_marginLeft="170dp"
         android:textColor="#2962ff"
         android:textSize="18sp"
         android:textStyle="bold" />
