@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignupActivity">
+    android:background="@color/white"
+    tools:context=".activities.SignupActivity">
 
     <TextView
         android:id="@+id/textView2"
@@ -24,24 +25,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/textView4"
         app:layout_constraintVertical_bias="0.52" />
-
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@drawable/grey_round"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:padding="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_phno" />
 
     <EditText
         android:id="@+id/et_phno"
@@ -79,15 +62,15 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
         tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/notlogin_button"
+    <TextView
+        android:id="@+id/notlogin_tv"
         android:layout_width="318dp"
         android:layout_height="42dp"
-        android:stateListAnimator="@null"
         android:text="Already have an account? Sign In"
         android:textAllCaps="false"
         android:textColor="#2962ff"
         app:backgroundTint="#ffffff"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="@+id/btn_login"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="@+id/btn_login"
@@ -170,8 +153,8 @@
         android:inputType="textPersonName"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_password" />
+        app:layout_constraintTop_toBottomOf="@+id/et_phno" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SigninActivity">
+    android:background="@color/white"
+    tools:context=".activities.SigninActivity">
 
 
     <TextView
@@ -26,23 +27,6 @@
         app:layout_constraintTop_toTopOf="@id/textView4"
         app:layout_constraintVertical_bias="0.52" />
 
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:background="@drawable/grey_round"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_phno" />
 
     <EditText
         android:id="@+id/et_phno"
@@ -50,7 +34,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="76dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:background="@drawable/grey_round"
@@ -68,7 +52,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:background="@drawable/grey_round"
@@ -77,20 +61,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_phno"
         tools:ignore="MissingConstraints" />
 
-    <Button
+    <TextView
         android:id="@+id/notlogin_button"
         android:layout_width="302dp"
         android:layout_height="44dp"
-        android:stateListAnimator="@null"
         android:text="Don't have an account? Sign Up"
         android:textAllCaps="false"
         android:textColor="#2962ff"
         app:backgroundTint="#ffffff"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="@+id/btn_login"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="@+id/btn_login"
         app:layout_constraintTop_toBottomOf="@+id/btn_login" />
 

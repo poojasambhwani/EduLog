@@ -1,19 +1,22 @@
-package com.example.edulog;
+package com.example.edulog.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import com.example.edulog.R;
 
 public class SigninActivity extends AppCompatActivity {
 
-    private EditText et_phno, et_password;
-    private Button btn_login,notlogin_button;
+    private EditText et_phno;
+    private TextView notlogin_button;
+    private Button btn_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +24,6 @@ public class SigninActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signin);
 
         et_phno = findViewById(R.id.et_phno);
-        et_password = findViewById(R.id.et_password);
         btn_login = findViewById(R.id.btn_login);
         notlogin_button = findViewById(R.id.notlogin_button);
 
@@ -30,7 +32,6 @@ public class SigninActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         String email = et_phno.getText().toString().trim();
-                        String password = et_password.getText().toString().trim();
                         {
                             Intent intent = new Intent(SigninActivity.this, OtpVerification.class);
                             startActivity(intent);
@@ -39,15 +40,17 @@ public class SigninActivity extends AppCompatActivity {
                 }
         );
 
-        notlogin_button.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(SigninActivity.this,SignupActivity.class);
-                        startActivity(intent);
+        try {
+            notlogin_button.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(SigninActivity.this, SignupActivity.class);
+                            startActivity(intent);
+                        }
                     }
-                }
-        );
+            );
+        }catch (NullPointerException e){}
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();

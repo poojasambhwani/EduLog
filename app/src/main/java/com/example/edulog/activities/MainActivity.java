@@ -1,22 +1,22 @@
-package com.example.edulog;
+package com.example.edulog.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.google.android.material.tabs.TabLayout;
+import com.example.edulog.R;
+import com.example.edulog.adapters.SliderPagerAdapter;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         setContentView(R.layout.activity_main);
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         timer = new Timer();
-        timer.scheduleAtFixedRate(new RemindTask(), 0, 2000);
+        timer.scheduleAtFixedRate(new RemindTask(), 0, 1000);
         // set dot indicators
         // make status bar transparent
 

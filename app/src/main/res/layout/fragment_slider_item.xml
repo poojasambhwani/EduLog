@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SliderItemFragment">
+    tools:context=".fragments.SliderItemFragment">
 
     <ImageView
         android:id="@+id/imageView"
@@ -20,24 +20,26 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="226dp"
+        android:textAlignment="center"
         android:layout_height="wrap_content"
         android:text="Online Courses"
         android:layout_marginTop="100dp"
-        android:layout_marginLeft="170dp"
+        android:layout_marginLeft="86dp"
+        android:layout_marginRight="87dp"
         android:textColor="#2962ff"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Engineering | Applied Science | Skill
-        Development | Soft Skills | Agriculture |
-                   Management"
+        android:layout_width="273dp"
+        android:layout_height="58dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="65dp"
         android:layout_marginTop="130dp"
-        android:layout_marginLeft="110dp"
+        android:textAlignment="center"
+        android:text="Engineering | Applied Science | Skill Development | Soft Skills | Agriculture | Management"
         android:textSize="13sp"
         android:textStyle="bold" />
 

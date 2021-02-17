@@ -1,4 +1,4 @@
-package com.example.edulog;
+package com.example.edulog.fragments;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.edulog.R;
 
 public class SliderItemFragment extends Fragment {
 

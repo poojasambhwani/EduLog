@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">EduLog</string>
     <string name="online">Online Courses</string>
-    <string name="engineering">Engineering | Applied Science | Skill
-                             Development | Soft Skills | Agriculture |
-                                         Management</string>
+    <string name="engineering">Engineering | Applied Science | Skill Development | Soft Skills | Agriculture | Management</string>
     <string name="tests">Tests</string>
     <string name="access">Access | Evaluate | Improve</string>
     <string name="placement">Our Placement Partners</string>
