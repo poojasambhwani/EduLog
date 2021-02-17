@@ -14,7 +14,7 @@ import com.example.edulog.R;
 
 public class SigninActivity extends AppCompatActivity {
 
-    private EditText et_phno;
+    private EditText et_phno,et_phncode;
     private TextView notlogin_button;
     private Button btn_login;
 
@@ -24,6 +24,7 @@ public class SigninActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signin);
 
         et_phno = findViewById(R.id.et_phno);
+        et_phncode = findViewById(R.id.et_phncode);
         btn_login = findViewById(R.id.btn_login);
         notlogin_button = findViewById(R.id.notlogin_button);
 
@@ -31,7 +32,8 @@ public class SigninActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String email = et_phno.getText().toString().trim();
+                        String phno = et_phno.getText().toString().trim();
+                        String code = et_phncode.getText().toString().trim();
                         {
                             Intent intent = new Intent(SigninActivity.this, OtpVerification.class);
                             startActivity(intent);
