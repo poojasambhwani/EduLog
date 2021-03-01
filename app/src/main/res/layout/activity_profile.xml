@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,29 +8,18 @@
     tools:context=".activities.ProfileActivity">
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/secondCons"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical"
-            android:scrollbars="none">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/book"
@@ -51,33 +39,28 @@
 
             <TextView
                 android:id="@+id/edulog"
-                android:layout_width="132dp"
+                android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="52dp"
                 android:fontFamily="@font/rubik_bold"
                 android:gravity="center"
                 android:text="EduLog"
                 android:textColor="#2962ff"
                 android:textSize="22sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toTopOf="@+id/ivProfile"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/book"
                 app:layout_constraintHorizontal_bias="0.489"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="@+id/book"
+                app:layout_constraintTop_toBottomOf="@+id/book" />
 
             <ImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginTop="32dp"
                 android:src="@drawable/slider_dot_selector"
-                app:layout_constraintBottom_toTopOf="@+id/cmplt_prof"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toEndOf="@+id/edulog"
+                app:layout_constraintStart_toStartOf="@+id/edulog"
+                app:layout_constraintTop_toBottomOf="@+id/edulog" />
 
             <TextView
                 android:id="@+id/cmplt_prof"
@@ -85,41 +68,46 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
                 android:fontFamily="@font/rubik_medium"
                 android:gravity="left"
                 android:text="Complete Your Profile"
                 android:textColor="#616161"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/f_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/edulog"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivProfile" />
 
             <TextView
                 android:id="@+id/f_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:text="FirstName"
-                app:layout_constraintBottom_toTopOf="@+id/et_fname"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/l_name"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cmplt_prof" />
 
             <TextView
                 android:id="@+id/l_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="116dp"
-                android:layout_marginRight="116dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:text="LastName"
+                app:layout_constraintBottom_toBottomOf="@+id/f_name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cmplt_prof" />
+                app:layout_constraintStart_toEndOf="@+id/f_name"
+                app:layout_constraintTop_toTopOf="@+id/f_name" />
 
             <EditText
                 android:id="@+id/et_fname"
@@ -143,15 +131,15 @@
                 android:id="@+id/et_lname"
                 android:layout_width="160dp"
                 android:layout_height="45dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/grey_round"
                 android:fontFamily="@font/rubik_regular"
                 android:inputType="textPersonName"
                 android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/et_fname"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/l_name" />
+                app:layout_constraintTop_toTopOf="@+id/et_fname" />
 
             <EditText
                 android:id="@+id/et_mail"
