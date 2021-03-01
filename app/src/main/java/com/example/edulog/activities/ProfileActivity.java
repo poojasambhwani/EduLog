@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private ImageView ivProfile;
+    private ImageView ivProfile, ivAadhar, ivTenth, ivTwlth;
     private EditText et_fname,et_lname,et_mail;
     ApiInterface apiInterface = new APIClient().getApiInterface();
     private JSONObject req;
@@ -63,6 +63,9 @@ public class ProfileActivity extends AppCompatActivity {
         user_id = sp.getString(Constants.USER_ID, null);
         token = sp.getString(Constants.TOKEN, null);
         ivProfile = findViewById(R.id.ivProfile);
+        ivAadhar = findViewById(R.id.ivAadhar);
+        ivTenth = findViewById(R.id.ivTenth);
+        ivTwlth = findViewById(R.id.ivTwlth);
         et_fname = findViewById(R.id.et_fname);
         et_lname = findViewById(R.id.et_lname);
         et_mail = findViewById(R.id.et_mail);
@@ -72,6 +75,18 @@ public class ProfileActivity extends AppCompatActivity {
         Glide.with(this)
                 .load("https://dev.hawkscode.com.au/edumitr/managepro/assets/uploads/profileImage/16076866071607686615664.jpg")
                 .into(ivProfile);
+
+        Glide.with(this)
+                .load("https://cdn.newsnationtv.com/resize/460_-/images/2020/08/29/aadhaar-card1-90.jpg")
+                .into(ivAadhar);
+
+        Glide.with(this)
+                .load("https://cache.careers360.mobi/media/articles/uploads/froala_editor/images/2020/7/15/CBSE-Result-2020-class-10-marksheet.jpg")
+                .into(ivTenth);
+
+        Glide.with(this)
+                .load("https://www.iittm.org/wp-content/uploads/2020/07/Digi-Locker-CBSE-Marksheet-2020.jpg")
+                .into(ivTwlth);
     }
 
     private void onCall(String user_id,String token) {
