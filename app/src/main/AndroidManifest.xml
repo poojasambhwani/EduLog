@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.edulog">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EduLog">
-        <activity android:name=".activities.SigninActivity"></activity>
+        <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.HomeActivity" />
+        <activity android:name=".activities.SigninActivity" />
         <activity android:name=".activities.OtpVerification" />
         <activity android:name=".activities.SignupActivity" />
         <activity android:name=".activities.MainActivity">
