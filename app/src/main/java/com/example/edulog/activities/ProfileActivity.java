@@ -97,8 +97,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         init();
         onCall(user_id, token);//remove calling and checking for permissions from the start, and put them on edit button
-        call_permissions();//yeh do codes yaha nahi lagenge, button ke click pe lagenge
-        checkPermission();//yeh do codes yaha nahi lagenge, button ke click pe lagenge
         clickEdit();//also you were calling sendImage method here, but it is supposed to be sent in the onActivityResult part when u get the file path
     }
 
@@ -521,7 +519,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 .load("https://eduvriksh.com/managepro/assets/uploads/profileImage/1614751945profilePic.jpg")
                                 .into(ivProfile);
                         Toast.makeText(ProfileActivity.this, "" + response.body().getUrl(), Toast.LENGTH_SHORT).show();
-                        Log.d("img", "onResponse: success");
+                        Log.d("img", "onResponse: success"+response.body().getUrl());
                     }else{
                         Log.d("img", "onResponse: fail");
                     }
