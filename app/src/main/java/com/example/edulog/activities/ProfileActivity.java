@@ -96,11 +96,10 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStart();
 
         init();
-        onCall(user_id, token);
-        call_permissions();
-        checkPermission();
-        clickEdit();
-        sendImage(filename);
+        onCall(user_id, token);//remove calling and checking for permissions from the start, and put them on edit button
+        call_permissions();//yeh do codes yaha nahi lagenge, button ke click pe lagenge
+        checkPermission();//yeh do codes yaha nahi lagenge, button ke click pe lagenge
+        clickEdit();//also you were calling sendImage method here, but it is supposed to be sent in the onActivityResult part when u get the file path
     }
 
     private void init() {
@@ -123,19 +122,21 @@ public class ProfileActivity extends AppCompatActivity {
 
         Glide.with(this)
                 .load("https://dev.hawkscode.com.au/edumitr/managepro/assets/uploads/profileImage/16076866071607686615664.jpg")
-                .into(ivProfile);
+                .into(ivProfile);//why is this static
 
         Glide.with(this)
                 .load("https://cdn.newsnationtv.com/resize/460_-/images/2020/08/29/aadhaar-card1-90.jpg")
                 .into(ivAadhar);
+        //why is this static
 
         Glide.with(this)
                 .load("https://cache.careers360.mobi/media/articles/uploads/froala_editor/images/2020/7/15/CBSE-Result-2020-class-10-marksheet.jpg")
-                .into(ivTenth);
+                .into(ivTenth);//why is this static
 
         Glide.with(this)
                 .load("https://www.iittm.org/wp-content/uploads/2020/07/Digi-Locker-CBSE-Marksheet-2020.jpg")
                 .into(ivTwlth);
+        //why is this static
     }
 
     private void onCall(String user_id, String token) {
@@ -184,8 +185,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(checkPermission()){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setData(Uri.parse("content://media/external/images/media/"));
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    //Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI); /// isme ACTION_VIEW nahi aayga PICK aayga
+                    //intent.setData(Uri.parse("content://media/external/images/media/"));///yeh line hatani hai
                     startActivityForResult(Intent.createChooser(intent, ""), Constants.CHOOSE);
                 }else{
                     call_permissions();
@@ -197,8 +199,8 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(checkPermission()){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setData(Uri.parse("content://media/external/images/media/"));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);// ACTION_PICK will be used
+                    intent.setData(Uri.parse("content://media/external/images/media/"));//repeating the same mistake here, this line will be deleted
                     startActivityForResult(Intent.createChooser(intent, ""), Constants.CHOOSE);
                 }else{
                     call_permissions();
@@ -495,9 +497,10 @@ public class ProfileActivity extends AppCompatActivity {
             Uri targetUri = data.getData();
 
             String compress_path = compressImage4(getRealPathFromURI(targetUri));
+            sendImage(compress_path);
 
                 Toast.makeText(ProfileActivity.this, "profile", Toast.LENGTH_SHORT).show();
-                Glide.with(ProfileActivity.this).load(targetUri).into(ivProfile);
+                Glide.with(ProfileActivity.this).load(compress_path).into(ivProfile);
 
         }
     }
@@ -508,20 +511,30 @@ public class ProfileActivity extends AppCompatActivity {
         // MultipartBody.Part is used to send the actual file name as well
         MultipartBody.Part body = MultipartBody.Part.createFormData("images", file1.getName(), requestFile);
         // you may add another part within the multipart request
-        Call<UploadImageModel> call = apiInterface.uploadImage(object);
+        Call<UploadImageModel> call = apiInterface.uploadImage(body); ///here you were sending object(JsonObject) but what we need to send here is multiplart body
         call.enqueue(new Callback<UploadImageModel>() {
             @Override
             public void onResponse(Call<UploadImageModel> call, Response<UploadImageModel> response) {
-                if (response.code() == 200) {
-                    Glide.with(editProfile)
-                            .load("https://eduvriksh.com/managepro/assets/uploads/profileImage/1614751945profilePic.jpg")
-                            .into(ivProfile);
-                    Toast.makeText(ProfileActivity.this, "" + response.body().getUrl(), Toast.LENGTH_SHORT).show();
+                if (response.isSuccessful()) {
+                    if(response.body().getCode() == 200){ // code is being sent into body, u were trying to access it directly
+                        Glide.with(editProfile)//u are uploading static url here, you will be uploading the url that u get from the response
+                                .load("https://eduvriksh.com/managepro/assets/uploads/profileImage/1614751945profilePic.jpg")
+                                .into(ivProfile);
+                        Toast.makeText(ProfileActivity.this, "" + response.body().getUrl(), Toast.LENGTH_SHORT).show();
+                        Log.d("img", "onResponse: success");
+                    }else{
+                        Log.d("img", "onResponse: fail");
+                    }
+
+                }else{
+                    Log.d("img", "onResponse: fail");
                 }
 
             }
             @Override
             public void onFailure(Call<UploadImageModel> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, ""+t, Toast.LENGTH_SHORT).show();
+                Log.d("img", "onResponse: fail"+t);
                 //Toast.makeText(ProfileActivity.this, "Fail" + t, Toast.LENGTH_SHORT).show();
             }
         });

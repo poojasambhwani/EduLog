@@ -4,13 +4,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class UploadImageModel {
-
     @SerializedName("code")
     @Expose
-    public Integer code;
+    private Integer code;
     @SerializedName("url")
     @Expose
-    public String url;
+    private String url;
 
     public Integer getCode() {
         return code;
