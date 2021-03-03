@@ -442,6 +442,56 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 
+            <ImageView
+                android:id="@+id/edit_profile"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="236dp"
+                android:layout_marginEnd="102dp"
+                android:layout_marginRight="102dp"
+                android:layout_marginBottom="59dp"
+                app:layout_constraintBottom_toTopOf="@+id/l_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivProfile"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_edit" />
+
+            <ImageView
+                android:id="@+id/editAadhar"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                app:layout_constraintTop_toBottomOf="@+id/et_postal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivAadhar"
+                app:layout_constraintBottom_toBottomOf="@id/ivAadhar"
+                android:src="@drawable/ic_edit" />
+
+
+            <ImageView
+                android:id="@+id/editTenth"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                app:layout_constraintTop_toBottomOf="@+id/editAadhar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivTenth"
+                app:layout_constraintBottom_toBottomOf="@id/ivTenth"
+                android:src="@drawable/ic_edit" />
+
+
+
+            <ImageView
+                android:id="@+id/editTwlth"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                app:layout_constraintTop_toBottomOf="@+id/editTenth"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivTwlth"
+                app:layout_constraintBottom_toBottomOf="@id/ivTwlth"
+                android:src="@drawable/ic_edit" />
+
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

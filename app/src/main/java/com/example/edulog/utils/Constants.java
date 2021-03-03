@@ -6,4 +6,5 @@ public class Constants {
     public static final String USER_PREFS = "USER_PREFS";
     public static final String LOGGED = "LOGGED";
 
+    public static final int CHOOSE = 0;
 }

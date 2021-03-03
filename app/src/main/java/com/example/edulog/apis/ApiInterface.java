@@ -4,6 +4,7 @@ import com.example.edulog.models.ProfileModel;
 import com.example.edulog.models.RegisterModel;
 import com.example.edulog.models.LoginModel;
 import com.example.edulog.models.ResendModel;
+import com.example.edulog.models.UploadImageModel;
 import com.example.edulog.models.VerificationModel;
 import com.google.gson.JsonObject;
 
@@ -34,6 +35,11 @@ public interface ApiInterface {
     @Headers("Content-Type: application/json")
     @POST("Profile/get")
     Call<ProfileModel> getProfile(@Body JsonObject object) ;
+
+    @Headers("Content-Type: application/json")
+    @POST("Content/uploadImage")
+    Call<UploadImageModel> uploadImage(@Body JsonObject object) ;
+
 
 
 }
