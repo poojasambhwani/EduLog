@@ -33,7 +33,7 @@ import retrofit2.Response;
 
 public class OtpVerification extends AppCompatActivity {
 
-    private TextView otpphn,resend;
+    private TextView otpphn,resend,photpcode;
     private EditText otpcode;
     private Button verify;
     private SharedPreferences sp;
@@ -66,14 +66,18 @@ public class OtpVerification extends AppCompatActivity {
     private void init() {
 
         otpphn = findViewById(R.id.otpphn);
+        photpcode = findViewById(R.id.photpcode);
         otpcode = findViewById(R.id.otpcode);
         resend = findViewById(R.id.resend);
         verify = findViewById(R.id.verify);
         req = new JSONObject();
 
         Intent intent1 = getIntent();
-        String str1 = intent1.getStringExtra("phnno");
+        String str1 = intent1.getStringExtra("phone");
         otpphn.setText(str1);
+
+        String str2 = intent1.getStringExtra("phCode");
+        photpcode.setText(str2);
 
         user_id = sp.getString(Constants.USER_ID, null);
 

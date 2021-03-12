@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".activities.OtpVerification">
 
     <ImageView
@@ -62,8 +63,8 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginLeft="64dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginLeft="72dp"
         android:gravity="center"
         android:text="OTP send to "
         android:textAlignment="center"
@@ -73,10 +74,12 @@
 
     <TextView
         android:id="@+id/otpphn"
-        android:layout_width="143dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:backgroundTint="@color/Transparent"
         android:gravity="center"
         android:text=""
@@ -85,7 +88,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintStart_toEndOf="@+id/photpcode"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <EditText
@@ -138,6 +141,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/otpcode" />
+
+    <TextView
+        android:id="@+id/photpcode"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/Transparent"
+        android:gravity="center"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

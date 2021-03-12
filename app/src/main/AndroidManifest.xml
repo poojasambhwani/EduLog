@@ -16,7 +16,6 @@
         android:theme="@style/Theme.EduLog"
         android:requestLegacyExternalStorage="true">
         <activity android:name=".activities.ProfileActivity"></activity>
-        <activity android:name=".activities.HomeActivity" />
         <activity android:name=".activities.SigninActivity" />
         <activity android:name=".activities.OtpVerification" />
         <activity android:name=".activities.SignupActivity" />

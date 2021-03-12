@@ -1,10 +1,13 @@
 package com.example.edulog.activities;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
@@ -25,10 +28,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +44,14 @@ import com.bumptech.glide.Glide;
 import com.example.edulog.R;
 import com.example.edulog.apis.APIClient;
 import com.example.edulog.apis.ApiInterface;
+import com.example.edulog.models.CityData;
+import com.example.edulog.models.CityModel;
+import com.example.edulog.models.CountryData;
+import com.example.edulog.models.CountryModel;
 import com.example.edulog.models.ProfileModel;
 import com.example.edulog.models.RegisterModel;
+import com.example.edulog.models.StateData;
+import com.example.edulog.models.StateModel;
 import com.example.edulog.models.UploadImageModel;
 import com.example.edulog.utils.Constants;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -53,6 +67,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -67,8 +82,12 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private ImageView ivProfile, ivAadhar, ivTenth, ivTwlth,editAadhar,editTenth,editTwlth,editProfile;
-    private EditText et_fname, et_lname, et_mail,et_number;
+    private ImageView ivProfile,editProfile,ivAadhar, ivTenth, ivTwlth,editAadhar,editTenth,editTwlth;
+    private EditText et_fname, et_lname, et_mail,et_number,et_country,et_state,et_city,et_address,et_postal;
+    private Button submit;
+    CountryAdapter adapter;
+    List<CountryData>countryDataList;
+    RecyclerView rv;
     ApiInterface apiInterface = new APIClient().getApiInterface();
     private JSONObject req;
     private JsonObject object;
@@ -87,8 +106,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         sp = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
 
+        rv=(RecyclerView)findViewById(R.id.recyclerView);
+        rv.setHasFixedSize(true);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
+
     }
 
     @Override
@@ -96,48 +120,61 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStart();
 
         init();
-        onCall(user_id, token);//remove calling and checking for permissions from the start, and put them on edit button
-        clickEdit();//also you were calling sendImage method here, but it is supposed to be sent in the onActivityResult part when u get the file path
+        callProfile(user_id, token);
+        callCountry(user_id,token);
+        clickEdit();
     }
 
     private void init() {
         user_id = sp.getString(Constants.USER_ID, null);
         token = sp.getString(Constants.TOKEN, null);
+
+        submit = findViewById(R.id.submit);
+
         ivProfile = findViewById(R.id.ivProfile);
-        ivAadhar = findViewById(R.id.ivAadhar);
-        ivTenth = findViewById(R.id.ivTenth);
-        ivTwlth = findViewById(R.id.ivTwlth);
-        editAadhar = findViewById(R.id.editAadhar);
-        editTenth = findViewById(R.id.editTenth);
-        editTwlth =findViewById(R.id.editTwlth);
         editProfile = findViewById(R.id.edit_profile);
+
+        //ivAadhar = findViewById(R.id.ivAadhar);
+        //ivTenth = findViewById(R.id.ivTenth);
+        //ivTwlth = findViewById(R.id.ivTwlth);
+
+        //editAadhar = findViewById(R.id.editAadhar);
+        //editTenth = findViewById(R.id.editTenth);
+        //editTwlth =findViewById(R.id.editTwlth);
+
         et_fname = findViewById(R.id.et_fname);
         et_lname = findViewById(R.id.et_lname);
         et_mail = findViewById(R.id.et_mail);
         et_number = findViewById(R.id.et_number);
+        et_country = findViewById(R.id.et_country);
+        et_city = findViewById(R.id.et_city);
+        et_state = findViewById(R.id.et_state);
+        et_address = findViewById(R.id.et_address);
+        et_postal = findViewById(R.id.et_postal);
+
         req = new JSONObject();
-
-
-        Glide.with(this)
-                .load("https://dev.hawkscode.com.au/edumitr/managepro/assets/uploads/profileImage/16076866071607686615664.jpg")
-                .into(ivProfile);//why is this static
-
-        Glide.with(this)
-                .load("https://cdn.newsnationtv.com/resize/460_-/images/2020/08/29/aadhaar-card1-90.jpg")
-                .into(ivAadhar);
-        //why is this static
-
-        Glide.with(this)
-                .load("https://cache.careers360.mobi/media/articles/uploads/froala_editor/images/2020/7/15/CBSE-Result-2020-class-10-marksheet.jpg")
-                .into(ivTenth);//why is this static
-
-        Glide.with(this)
-                .load("https://www.iittm.org/wp-content/uploads/2020/07/Digi-Locker-CBSE-Marksheet-2020.jpg")
-                .into(ivTwlth);
-        //why is this static
     }
 
-    private void onCall(String user_id, String token) {
+    private void onClick() {
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putBoolean("logged", false);
+                editor.apply();
+                Intent i = new Intent(ProfileActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+    }
+
+    /*
+    method to call profile api
+     */
+
+    private void callProfile(String user_id, String token) {
         try {
 
             JSONObject array = new JSONObject();
@@ -156,16 +193,27 @@ public class ProfileActivity extends AppCompatActivity {
         call.enqueue(new Callback<ProfileModel>() {
             @Override
             public void onResponse(Call<ProfileModel> call, Response<ProfileModel> response) {
-                try {
+                if(response.isSuccessful()) {
                     if (response.body().getCode() == 200) {
-                        et_fname.setText(response.body().getData().getFirstName());
-                        et_lname.setText(response.body().getData().getLastName());
-                        et_mail.setText(response.body().getData().getEmail());
-                        et_number.setText(response.body().getData().getPhoneNumber());
+                        if (response.body().getCode() != null) {
+                            et_fname.setText(response.body().getData().getFirstName());
+                            et_lname.setText(response.body().getData().getLastName());
+                            et_mail.setText(response.body().getData().getEmail());
+                            et_number.setText(response.body().getData().getPhoneNumber());
+                            try {
+                                et_country.setText(response.body().getData().getCountryName());
+                            }catch (NullPointerException e){}
+                            Glide.with(ProfileActivity.this).load(response.body().getData().profilePic).into(ivProfile);
+                            onClick();
+                        } else {
+                            Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
                     }
-                } catch (NullPointerException e) {
+                }else {
+                        Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
@@ -178,14 +226,183 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    /*
+    method to call country api
+     */
+
+    private void callCountry(String user_id,String token) {
+        try {
+
+            JSONObject array = new JSONObject();
+
+            array.put("user_id", user_id);
+            array.put("Token", token);
+            req.put("auth", array);
+
+            JsonParser jsonParser = new JsonParser();
+            object = (JsonObject) jsonParser.parse(req.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Call<CountryModel> call = apiInterface.getCountry(object);
+        call.enqueue(new Callback<CountryModel>() {
+            @Override
+            public void onResponse(Call<CountryModel> call, Response<CountryModel> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getCode() == 200) {
+                        if (response.body().getCode() != null) {
+
+                        } else {
+                            Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<CountryModel> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, "" + t, Toast.LENGTH_SHORT).show();
+                Log.d("TAG", "onFailure: " + t);
+
+            }
+        });
+    }
+    /*
+    method to call state api
+     */
+
+    private void callState(String user_id,String token) {
+        try {
+
+            JSONObject array = new JSONObject();
+            JSONObject data = new JSONObject();
+
+            array.put("user_id", user_id);
+            array.put("Token", token);
+            req.put("auth", array);
+
+            data.put("country_id", et_country.getText().toString().trim());
+
+            JsonParser jsonParser = new JsonParser();
+            object = (JsonObject) jsonParser.parse(req.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Call<StateModel> call = apiInterface.getState(object);
+        call.enqueue(new Callback<StateModel>() {
+            @Override
+            public void onResponse(Call<StateModel> call, Response<StateModel> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getCode() == 200) {
+                        if (response.body().getCode() != null) {
+
+                        } else {
+                            Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<StateModel> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, "" + t, Toast.LENGTH_SHORT).show();
+                Log.d("TAG", "onFailure: " + t);
+
+            }
+        });
+    }
+
+    /*
+    method to call city api
+     */
+
+    private void callCity(String user_id,String token) {
+        try {
+
+            JSONObject array = new JSONObject();
+            JSONObject data = new JSONObject();
+
+            array.put("user_id", user_id);
+            array.put("Token", token);
+            req.put("auth", array);
+
+            data.put("state_id", et_city.getText().toString().trim());
+
+            JsonParser jsonParser = new JsonParser();
+            object = (JsonObject) jsonParser.parse(req.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Call<CityModel> call = apiInterface.getCity(object);
+        call.enqueue(new Callback<CityModel>() {
+            @Override
+            public void onResponse(Call<CityModel> call, Response<CityModel> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getCode() == 200) {
+                        if (response.body().getCode() != null) {
+
+                        } else {
+                            Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<CityModel> call, Throwable t) {
+                Toast.makeText(ProfileActivity.this, "" + t, Toast.LENGTH_SHORT).show();
+                Log.d("TAG", "onFailure: " + t);
+
+            }
+        });
+    }
+
+
+    /**
+     * handle codes for location dialog here*/
+
+    private void showReplyDialog(String region, ArrayList<CountryData> data, ArrayList<StateData> statesData, ArrayList<CityData> cityData) {
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(ProfileActivity.this).inflate(R.layout.dialog_select_location, viewGroup, false);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(ProfileActivity.this);
+        builder1.setView(dialogView);
+        AlertDialog alertDialog = builder1.create();
+        RecyclerView rvLocation = dialogView.findViewById(R.id.rvLocation);
+        LinearLayoutManager manager = new LinearLayoutManager(ProfileActivity.this, RecyclerView.VERTICAL, false);
+        if (region.equalsIgnoreCase("country")) {
+            adapter = new CountryAdapter(ProfileActivity.this, data, alertDialog);
+            rvLocation.setLayoutManager(manager);
+            rvLocation.setAdapter(adapter);
+        } else if (region.equalsIgnoreCase("state")) {
+            StateAdapter adapter = new StateAdapter(ProfileActivity.this, statesData, alertDialog);
+            rvLocation.setLayoutManager(manager);
+            rvLocation.setAdapter(adapter);
+        } else {
+            CityAdapter adapter = new CityAdapter(ProfileActivity.this, cityData, alertDialog);
+            rvLocation.setLayoutManager(manager);
+            rvLocation.setAdapter(adapter);
+        }
+        alertDialog.show();
+    }
+
     private void clickEdit(){
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(checkPermission()){
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    //Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI); /// isme ACTION_VIEW nahi aayga PICK aayga
-                    //intent.setData(Uri.parse("content://media/external/images/media/"));///yeh line hatani hai
                     startActivityForResult(Intent.createChooser(intent, ""), Constants.CHOOSE);
                 }else{
                     call_permissions();
@@ -193,12 +410,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        editAadhar.setOnClickListener(new View.OnClickListener() {
+        /*editAadhar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(checkPermission()){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);// ACTION_PICK will be used
-                    intent.setData(Uri.parse("content://media/external/images/media/"));//repeating the same mistake here, this line will be deleted
+                    Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(Intent.createChooser(intent, ""), Constants.CHOOSE);
                 }else{
                     call_permissions();
@@ -211,7 +427,6 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(checkPermission()){
                     Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setData(Uri.parse("content://media/external/images/media/"));
                     startActivityForResult(Intent.createChooser(intent, ""), Constants.CHOOSE);
                 }else{
                     call_permissions();
@@ -223,13 +438,12 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(checkPermission()){
                     Intent intent = new Intent(Intent.ACTION_VIEW, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setData(Uri.parse("content://media/external/images/media/"));
                     startActivityForResult(Intent.createChooser(intent, ""), Constants.CHOOSE);
                 }else{
                     call_permissions();
                 }
             }
-        });
+        });*/
     }
 
     /**
@@ -497,9 +711,6 @@ public class ProfileActivity extends AppCompatActivity {
             String compress_path = compressImage4(getRealPathFromURI(targetUri));
             sendImage(compress_path);
 
-                Toast.makeText(ProfileActivity.this, "profile", Toast.LENGTH_SHORT).show();
-                Glide.with(ProfileActivity.this).load(compress_path).into(ivProfile);
-
         }
     }
 
@@ -515,10 +726,10 @@ public class ProfileActivity extends AppCompatActivity {
             public void onResponse(Call<UploadImageModel> call, Response<UploadImageModel> response) {
                 if (response.isSuccessful()) {
                     if(response.body().getCode() == 200){ // code is being sent into body, u were trying to access it directly
-                        Glide.with(editProfile)//u are uploading static url here, you will be uploading the url that u get from the response
-                                .load("https://eduvriksh.com/managepro/assets/uploads/profileImage/1614751945profilePic.jpg")
+                        Glide.with(ProfileActivity.this)//u are uploading static url here, you will be uploading the url that u get from the response
+                                .load(response.body().getUrl())
                                 .into(ivProfile);
-                        Toast.makeText(ProfileActivity.this, "" + response.body().getUrl(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ProfileActivity.this, "" + response.body().getUrl(), Toast.LENGTH_SHORT).show();
                         Log.d("img", "onResponse: success"+response.body().getUrl());
                     }else{
                         Log.d("img", "onResponse: fail");
@@ -537,4 +748,5 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 }

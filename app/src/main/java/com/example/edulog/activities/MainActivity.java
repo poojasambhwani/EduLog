@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         sp = getSharedPreferences("pref", Context.MODE_PRIVATE);
 
-        boolean loggedIn = sp.getBoolean(Constants.LOGGED, false);//this must be false, if the user is not logged, the "true" will carry the user forward regardless.....so keep it false
+        boolean loggedIn = sp.getBoolean(Constants.LOGGED, true);
         if (loggedIn) {
             Intent i = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(i);

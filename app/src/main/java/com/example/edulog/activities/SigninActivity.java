@@ -114,6 +114,7 @@ public class SigninActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sp.edit();
                         editor.putBoolean(Constants.LOGGED,true);
                         editor.putString(Constants.USER_ID, String.valueOf(response.body().getData().getUserId()));
+                        editor.putString("phone",et_phno.getText().toString().trim());
                         editor.apply();
                         Intent i = new Intent(SigninActivity.this, OtpVerification.class);
                         i.putExtra("phCode", "+91");
