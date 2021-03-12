@@ -252,7 +252,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() == 200) {
                         if (response.body().getCode() != null) {
-
+                            showReplyDialog("country",response.body().getData(), null, null);
                         } else {
                             Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
                         }
