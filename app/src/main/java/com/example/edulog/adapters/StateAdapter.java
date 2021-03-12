@@ -1,6 +1,7 @@
-package com.example.edulog.activities;
+package com.example.edulog.adapters;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,32 +12,31 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.edulog.R;
-import com.example.edulog.models.CityData;
+import com.example.edulog.activities.ProfileActivity;
+import com.example.edulog.models.StateData;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder>{
-    ArrayList<CityData> ctData;
+public class StateAdapter extends RecyclerView.Adapter<StateAdapter.ViewHolder>{
     AlertDialog alertDialog;
+    ArrayList<StateData> stateData;
 
-    public CityAdapter(ProfileActivity profileActivity, ArrayList<CityData> cityData, AlertDialog alertDialog) {
-        this.ctData = cityData;
+    public StateAdapter(ProfileActivity profileActivity, ArrayList<StateData> statesData, AlertDialog alertDialog) {
         this.alertDialog = alertDialog;
+        this.stateData = statesData;
     }
-
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.city_list,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.country_list,parent,false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final CityData cityDataList= ctData.get(position);
-        holder.et_city.setText(cityDataList.getCityName());
+        holder.et_state.setText(stateData.get(position).getStateName());
+
     }
 
     @Override
@@ -45,11 +45,10 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder>{
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private EditText et_city;
+        private EditText et_state;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            et_city=itemView.findViewById(R.id.et_city);
+            et_state=itemView.findViewById(R.id.et_state);
         }
     }
 }
-

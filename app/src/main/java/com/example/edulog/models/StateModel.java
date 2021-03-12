@@ -1,5 +1,6 @@
 package com.example.edulog.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +12,7 @@ public class StateModel {
     public Integer code;
     @SerializedName("data")
     @Expose
-    public List<StateData> data = null;
+    public ArrayList<StateData> data = null;
 
     public Integer getCode() {
         return code;
@@ -21,11 +22,11 @@ public class StateModel {
         this.code = code;
     }
 
-    public List<StateData> getData() {
+    public ArrayList<StateData> getData() {
         return data;
     }
 
-    public void setData(List<StateData> data) {
+    public void setData(ArrayList<StateData> data) {
         this.data = data;
     }
 

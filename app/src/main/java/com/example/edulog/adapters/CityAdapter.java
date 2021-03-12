@@ -1,6 +1,5 @@
-package com.example.edulog.activities;
+package com.example.edulog.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +10,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.edulog.R;
-import com.example.edulog.models.CountryData;
+import com.example.edulog.activities.ProfileActivity;
+import com.example.edulog.models.CityData;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHolder>{
-    ArrayList<CountryData> countryData;
+public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder>{
+    ArrayList<CityData> ctData;
     AlertDialog alertDialog;
 
-    public CountryAdapter(ProfileActivity profileActivity, ArrayList<CountryData> data, AlertDialog alertDialog) {
-        this.countryData = data;
-        this.alertDialog = alertDialog;}
+    public CityAdapter(ProfileActivity profileActivity, ArrayList<CityData> cityData, AlertDialog alertDialog) {
+        this.ctData = cityData;
+        this.alertDialog = alertDialog;
+    }
 
 
     @NonNull
@@ -34,8 +34,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.et_country.setText(countryData.get(position).getCountryName());
-
+        holder.et_city.setText(ctData.get(position).getCityName());
     }
 
     @Override
@@ -44,10 +43,11 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private EditText et_country;
+        private EditText et_city;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            et_country=itemView.findViewById(R.id.et_country);
+            et_city=itemView.findViewById(R.id.et_city);
         }
     }
 }
+
