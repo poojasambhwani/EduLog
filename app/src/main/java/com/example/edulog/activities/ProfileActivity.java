@@ -3,6 +3,7 @@ package com.example.edulog.activities;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.solver.state.State;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -42,6 +43,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.edulog.R;
+import com.example.edulog.adapters.CityAdapter;
+import com.example.edulog.adapters.CountryAdapter;
+import com.example.edulog.adapters.StateAdapter;
 import com.example.edulog.apis.APIClient;
 import com.example.edulog.apis.ApiInterface;
 import com.example.edulog.models.CityData;
@@ -85,19 +89,26 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView ivProfile,editProfile,ivAadhar, ivTenth, ivTwlth,editAadhar,editTenth,editTwlth;
     private EditText et_fname, et_lname, et_mail,et_number,et_country,et_state,et_city,et_address,et_postal;
     private Button submit;
-    CountryAdapter adapter;
-    List<CountryData>countryDataList;
-    RecyclerView rv;
-    ApiInterface apiInterface = new APIClient().getApiInterface();
+
     private JSONObject req;
     private JsonObject object;
+
     private String token, user_id;
     private SharedPreferences sp;
-    private String[] permissions = new String[]{
-            READ_EXTERNAL_STORAGE,
-            WRITE_EXTERNAL_STORAGE};
+    private String[] permissions = new String[]{READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE};
     public static final int MULTIPLE_PERMISSIONS = 10;
+
     private String filename = "";
+    private String countryId;
+    private String stateId;
+    private String cityId;
+
+    CountryAdapter adapter;
+    ArrayList<CountryData> data;
+    ArrayList<StateData> stateData;
+    ArrayList<CityData> cityData;
+    RecyclerView rv;
+    ApiInterface apiInterface = new APIClient().getApiInterface();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,9 +261,17 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<CountryModel> call, Response<CountryModel> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getCode() == 200) {
-                        if (response.body().getCode() != null) {
+                    if (response.body().getCode() != null) {
+                        if (response.body().getCode() == 200) {
                             showReplyDialog("country",response.body().getData(), null, null);
+                            for(int i = 0; i < stateData.size(); i++) {
+                                State stateData = new State();
+                                if (stateData.get(i).getCountryId() == countryId) {
+
+                                    setStateId(stateData.get(i).getStateId());
+                                    setCountryId(stateData.get(i).getCountryId());
+                                }
+                            }
                         } else {
                             Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
                         }
@@ -298,9 +317,16 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<StateModel> call, Response<StateModel> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getCode() == 200) {
-                        if (response.body().getCode() != null) {
-
+                    if (response.body().getCode() != null) {
+                        if (response.body().getCode() == 200) {
+                            showReplyDialog("state",null, response.body().getData(), null);
+                            for(int i = 0; i < cityData.size(); i++) {
+                                City cityData = new City();
+                                if (cityData.get(i).getStateId() == stateId) {
+                                    setCityId(cityData.get(i).getCityId());
+                                    setStateId(cityData.get(i).getStateId());
+                                }
+                            }
                         } else {
                             Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
                         }
@@ -347,9 +373,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<CityModel> call, Response<CityModel> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getCode() == 200) {
-                        if (response.body().getCode() != null) {
-
+                    if (response.body().getCode() != null) {
+                        if (response.body().getCode() == 200) {
+                            showReplyDialog("city",null, null, response.body().getData());
                         } else {
                             Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
                         }
@@ -749,4 +775,31 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    getter and setter for id's of country , state , & city
+     */
+
+    public String getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(String countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(String stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
 }
