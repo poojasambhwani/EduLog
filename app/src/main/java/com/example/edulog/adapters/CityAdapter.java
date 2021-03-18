@@ -1,5 +1,6 @@
 package com.example.edulog.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ import java.util.ArrayList;
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder>{
     ArrayList<CityData> ctData;
     AlertDialog alertDialog;
+    Context context;
 
-    public CityAdapter(ProfileActivity profileActivity, ArrayList<CityData> cityData, AlertDialog alertDialog) {
+    public CityAdapter(Context profileActivity, ArrayList<CityData> cityData, AlertDialog alertDialog) {
         this.ctData = cityData;
         this.alertDialog = alertDialog;
+        this.context = profileActivity;
     }
 
 
@@ -35,11 +38,23 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.et_city.setText(ctData.get(position).getCityName());
+        holder.et_city.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ProfileActivity)context).setCityId(ctData.get(position).getCityId());
+                ((ProfileActivity)context).showCity(ctData.get(position).getCityName());
+                alertDialog.dismiss();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        if(ctData.size() != 0){
+            return ctData.size();
+        }else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

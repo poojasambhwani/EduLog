@@ -56,12 +56,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().getDecorView()
-                    .setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                }
+            try {
+                getWindow().getDecorView()
+                        .setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 // hide action bar you can use NoAction theme as well
                 getSupportActionBar().hide();
+            }catch (NullPointerException e){}
+        }
+
                 // bind views
                 viewPager = findViewById(R.id.pagerIntroSlider);
                 sliderDotspanel = (LinearLayout) findViewById(R.id.SliderDots);

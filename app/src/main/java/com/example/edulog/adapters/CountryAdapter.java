@@ -1,9 +1,11 @@
 package com.example.edulog.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,9 +20,11 @@ import java.util.ArrayList;
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHolder>{
     ArrayList<CountryData> countryData;
     AlertDialog alertDialog;
+    Context context;
 
-    public CountryAdapter(ProfileActivity profileActivity, ArrayList<CountryData> data, AlertDialog alertDialog) {
+    public CountryAdapter(Context profileActivity, ArrayList<CountryData> data, AlertDialog alertDialog) {
         this.countryData = data;
+        this.context = profileActivity;
         this.alertDialog = alertDialog;}
 
 
@@ -33,19 +37,31 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.et_country.setText(countryData.get(position).getCountryName());
+        holder.country.setText(countryData.get(position).getCountryName());
+        holder.country.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ProfileActivity)context).setCountryId(countryData.get(position).getCountryId());
+                ((ProfileActivity)context).showCountry(countryData.get(position).countryName);
+                alertDialog.dismiss();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        if(countryData.size() != 0){
+            return countryData.size();
+        }else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private EditText et_country;
+        private TextView country;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            et_country=itemView.findViewById(R.id.et_country);
+            country=itemView.findViewById(R.id.country);
         }
     }
 }

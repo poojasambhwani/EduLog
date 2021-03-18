@@ -3,14 +3,12 @@ package com.example.edulog.activities;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.solver.state.State;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,11 +31,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,12 +44,12 @@ import com.example.edulog.adapters.CountryAdapter;
 import com.example.edulog.adapters.StateAdapter;
 import com.example.edulog.apis.APIClient;
 import com.example.edulog.apis.ApiInterface;
+
 import com.example.edulog.models.CityData;
 import com.example.edulog.models.CityModel;
 import com.example.edulog.models.CountryData;
 import com.example.edulog.models.CountryModel;
 import com.example.edulog.models.ProfileModel;
-import com.example.edulog.models.RegisterModel;
 import com.example.edulog.models.StateData;
 import com.example.edulog.models.StateModel;
 import com.example.edulog.models.UploadImageModel;
@@ -71,7 +67,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -85,7 +80,6 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class ProfileActivity extends AppCompatActivity {
-
     private ImageView ivProfile,editProfile,ivAadhar, ivTenth, ivTwlth,editAadhar,editTenth,editTwlth;
     private EditText et_fname, et_lname, et_mail,et_number,et_country,et_state,et_city,et_address,et_postal;
     private Button submit;
@@ -117,12 +111,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         sp = getSharedPreferences(Constants.USER_PREFS, Context.MODE_PRIVATE);
 
-        rv=(RecyclerView)findViewById(R.id.recyclerView);
-        rv.setHasFixedSize(true);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getSupportActionBar().hide();
+        try {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getSupportActionBar().hide();
+        }catch (NullPointerException e){}
 
     }
 
@@ -132,7 +124,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         init();
         callProfile(user_id, token);
-        callCountry(user_id,token);
         clickEdit();
     }
 
@@ -167,6 +158,28 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void onClick() {
+
+        et_country.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callCountry(user_id,token);
+            }
+        });
+
+        et_state.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callState(user_id,token);
+            }
+        });
+
+        et_city.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callCity(user_id,token);
+            }
+        });
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,10 +224,7 @@ public class ProfileActivity extends AppCompatActivity {
                             et_lname.setText(response.body().getData().getLastName());
                             et_mail.setText(response.body().getData().getEmail());
                             et_number.setText(response.body().getData().getPhoneNumber());
-                            try {
-                                et_country.setText(response.body().getData().getCountryName());
-                            }catch (NullPointerException e){}
-                            Glide.with(ProfileActivity.this).load(response.body().getData().profilePic).into(ivProfile);
+                            Glide.with(ProfileActivity.this).load(response.body().getData().getProfilePic()).into(ivProfile);
                             onClick();
                         } else {
                             Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
@@ -263,15 +273,20 @@ public class ProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() != null) {
                         if (response.body().getCode() == 200) {
-                            showReplyDialog("country",response.body().getData(), null, null);
-                            for(int i = 0; i < stateData.size(); i++) {
+                            if(response.body().getData() != null){
+                                showReplyDialog("country",response.body().getData(), null, null);
+                            }else{
+                                Toast.makeText(ProfileActivity.this, "null", Toast.LENGTH_SHORT).show();
+                            }
+
+                            /*for(int i = 0; i < stateData.size(); i++) {
                                 State stateData = new State();
                                 if (stateData.get(i).getCountryId() == countryId) {
 
                                     setStateId(stateData.get(i).getStateId());
                                     setCountryId(stateData.get(i).getCountryId());
                                 }
-                            }
+                            }*/
                         } else {
                             Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
                         }
@@ -319,13 +334,10 @@ public class ProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() != null) {
                         if (response.body().getCode() == 200) {
-                            showReplyDialog("state",null, response.body().getData(), null);
-                            for(int i = 0; i < cityData.size(); i++) {
-                                City cityData = new City();
-                                if (cityData.get(i).getStateId() == stateId) {
-                                    setCityId(cityData.get(i).getCityId());
-                                    setStateId(cityData.get(i).getStateId());
-                                }
+                            if(response.body().getData() != null){
+                                showReplyDialog("state",null, response.body().getData(), null);
+                            }else{
+                                Toast.makeText(ProfileActivity.this, "null", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
@@ -375,8 +387,11 @@ public class ProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() != null) {
                         if (response.body().getCode() == 200) {
-                            showReplyDialog("city",null, null, response.body().getData());
-                        } else {
+                            if(response.body().getData() != null){
+                                showReplyDialog("city",null, null, response.body().getData());
+                            }else{
+                                Toast.makeText(ProfileActivity.this, "null", Toast.LENGTH_SHORT).show();
+                            }                        } else {
                             Toast.makeText(ProfileActivity.this, "fail", Toast.LENGTH_SHORT).show();
                         }
                     } else {
@@ -394,6 +409,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
     /**
@@ -730,14 +746,17 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(data != null){
+            if (resultCode == RESULT_OK && requestCode == 1) {
+                Uri targetUri = data.getData();
 
-        if (resultCode == RESULT_OK && requestCode == 1) {
-            Uri targetUri = data.getData();
+                String compress_path = compressImage4(getRealPathFromURI(targetUri));
+                sendImage(compress_path);
 
-            String compress_path = compressImage4(getRealPathFromURI(targetUri));
-            sendImage(compress_path);
-
+            }
         }
+
+
     }
 
     private void sendImage(String file) {
@@ -773,6 +792,28 @@ public class ProfileActivity extends AppCompatActivity {
                 //Toast.makeText(ProfileActivity.this, "Fail" + t, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void showCountry(String country){
+        Toast.makeText(this, ""+getCountryId(), Toast.LENGTH_SHORT).show();
+        et_country.setText(country);
+
+    }
+
+    public void showState(String state){
+        Toast.makeText(this, ""+getStateId(), Toast.LENGTH_SHORT).show();
+        et_state.setText(state);
+        if(et_country != null){
+            et_country.performClick();
+        }
+    }
+
+    public void showCity(String city){
+        Toast.makeText(this, ""+getCityId(), Toast.LENGTH_SHORT).show();
+        et_city.setText(city);
+        if(et_state != null){
+            et_state.performClick();
+        }
     }
 
     /*

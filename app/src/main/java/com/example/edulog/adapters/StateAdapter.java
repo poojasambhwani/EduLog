@@ -20,10 +20,12 @@ import java.util.ArrayList;
 public class StateAdapter extends RecyclerView.Adapter<StateAdapter.ViewHolder>{
     AlertDialog alertDialog;
     ArrayList<StateData> stateData;
+    Context context;
 
-    public StateAdapter(ProfileActivity profileActivity, ArrayList<StateData> statesData, AlertDialog alertDialog) {
+    public StateAdapter(Context profileActivity, ArrayList<StateData> statesData, AlertDialog alertDialog) {
         this.alertDialog = alertDialog;
         this.stateData = statesData;
+        this.context = profileActivity;
     }
 
     @NonNull
@@ -36,12 +38,23 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.et_state.setText(stateData.get(position).getStateName());
-
+        holder.et_state.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ProfileActivity)context).setStateId(stateData.get(position).getStateId());
+                ((ProfileActivity)context).showState(stateData.get(position).getStateName());
+                alertDialog.dismiss();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        if(stateData.size() != 0){
+            return stateData.size();
+        }else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
